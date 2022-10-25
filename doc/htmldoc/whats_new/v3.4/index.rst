@@ -18,8 +18,8 @@ Documentation restructuring and new theme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 NEST documentation has a new theme! We did a major overhaul of the layout and structure of the documentation.
-The changes aim to improve findability and access of content. With a more modern 
-layout, our wide range of docs can be discovered more easily. 
+The changes aim to improve findability and access of content. With a more modern
+layout, our wide range of docs can be discovered more easily.
 The table of contents is simplified and the content is grouped based on topic (neurons, synapses etc)
 rather than type of documentation (e.g., 'guides').
 
@@ -31,7 +31,7 @@ Inferred extent of spatial layers with freely placed neurons
 ............................................................
 
 Spatial layers can be created by specifying only the node positions using ``spatial.free``,
-without explicitly specifying the ``extent``. 
+without explicitly specifying the ``extent``.
 In that case, in NEST 3.4 and later, the ``extent`` will be determined by the position of the
 lower-leftmost and upper-rightmost nodes in the layer; earlier versions of NEST added a hard-coded
 padding to the extent. The ``center`` is computed as the midpoint between the lower-leftmost and
@@ -46,3 +46,12 @@ Deprecation information
 * Model ``spike_dilutor`` is now deprecated and can only be used
   in single-threaded mode. To implement connections which transmit
   spikes with fixed probability, use ``bernoulli_synapse`` instead.
+
+
+Changes in NEST Server
+~~~~~~~~~~~~~~~~~~~~~~
+
+* By default NEST Server runs on port 52425 (previously 5000).
+* Minimize security risk in NEST Server.
+  * By default exec call is disabled, only API calls are enabled.
+  * The user is able to turn on exec call which means that the user is aware of the risk.

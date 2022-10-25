@@ -42,14 +42,27 @@ from copy import deepcopy
 
 import os
 
+def get_boolean_environ(env_key, default_value = 'false'):
+    env_value = os.environ.get(env_key, default_value)
+    return env_value.lower() in ['yes', 'true', 't', '1']
+
+EXEC_SCRIPT = get_boolean_environ('NEST_SERVER_EXEC_SCRIPT')
 MODULES = os.environ.get('NEST_SERVER_MODULES', 'nest').split(',')
-RESTRICTION_OFF = bool(os.environ.get('NEST_SERVER_RESTRICTION_OFF', False))
+RESTRICTION_OFF = get_boolean_environ('NEST_SERVER_RESTRICTION_OFF')
 EXCEPTION_ERROR_STATUS = 400
 
-if RESTRICTION_OFF:
-    msg = 'NEST Server runs without a RestrictedPython trusted environment.'
-    print(f'***\n*** WARNING: {msg}\n***')
-
+if EXEC_SCRIPT:
+    print(80 * '*')
+    msg = ("\n" + 9*" ").join([
+        'NEST Server runs with the `exec` command activated.',
+        'This means that any code can be executed!',
+        'The security of your system can not be ensured!'
+    ])
+    print(f'WARNING: {msg}')
+    if RESTRICTION_OFF:
+        msg = 'NEST Server runs without a RestrictedPython trusted environment.'
+        print(f'WARNING: {msg}')
+    print(80 * '*')
 
 __all__ = [
     'app',
@@ -164,9 +177,15 @@ def route_exec():
     """ Route to execute script in Python.
     """
 
-    args, kwargs = get_arguments(request)
-    response = do_call('exec', args, kwargs)
-    return jsonify(response)
+    if EXEC_SCRIPT:
+        args, kwargs = get_arguments(request)
+        response = do_call('exec', args, kwargs)
+        return jsonify(response)
+    else:
+        abort(Response(
+            'The route `/exec` has been disabled. Please contact the server administrator.',
+            403
+        ))
 
 
 # --------------------------

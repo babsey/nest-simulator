@@ -208,7 +208,6 @@ nest_calls.sort()
 
 
 @app.route('/api', methods=['GET'])
-@cross_origin()
 def route_api():
     """ Route to list call functions in NEST.
     """

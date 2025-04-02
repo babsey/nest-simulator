@@ -19,7 +19,3 @@ flask-cors
 gunicorn
 requests
 RestrictedPython
-
-# Uncomment next lines of packages for mpi:
-# docopt
-# mpi4py

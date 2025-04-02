@@ -18,10 +18,7 @@ numpy
 pandas
 scipy
 matplotlib
-mpi4py
 h5py
-black
-pre-commit
 isort
 notebook
 jupyterlab

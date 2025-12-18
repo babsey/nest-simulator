@@ -192,7 +192,6 @@ def do_exec(args, kwargs):
     source_code = kwargs.get("source", "")
     source_cleaned = clean_code(source_code)
 
-    locals_ = dict()
     response = dict()
     if RESTRICTION_DISABLED:
         with Capturing() as stdout:
@@ -206,14 +205,14 @@ def do_exec(args, kwargs):
         globals_ = get_restricted_globals()
         globals_.update(get_modules_from_env())
         get_or_error(exec)(code, globals_)
-        if "_print" in locals_:
-            response["stdout"] = "".join(locals_["_print"].txt)
+        if "_print" in globals_:
+            response["stdout"] = "".join(globals_["_print"].txt)
 
     if "return" in kwargs:
         if isinstance(kwargs["return"], (list, tuple)):
-            data = dict([(variable, locals_.get(variable, None)) for variable in kwargs["return"]])
+            data = dict([(variable, globals_.get(variable, None)) for variable in kwargs["return"]])
         else:
-            data = locals_.get(kwargs["return"], None)
+            data = globals_.get(kwargs["return"], None)
 
         response["data"] = get_or_error(nest.serialize_data)(data)
     return response
